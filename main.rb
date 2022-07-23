@@ -1,6 +1,7 @@
 require 'httparty'
 require 'numbers_in_words'
 require 'numbers_in_words/duck_punch'
+require './models/advertisement'
 
 base_url = "https://www.storia.ro/_next/data/pgVOGyuLbnviUF3fMMbc8/ro/cautare/inchiriere/apartament/bihor/oradea.json"
 page = 1
@@ -14,17 +15,13 @@ loop do
 
   break if ads.count.zero?
 
-  ads.each do |ad|
-    value = ad["totalPrice"]["value"]
-    currency = ad["totalPrice"]["currency"]
-    area_in_square_meters = ad["areaInSquareMeters"]
-    price_per_square_meter = 1.0 * value / area_in_square_meters
-    rooms_number = ad["roomsNumber"]
+  ads.each do |json_ad|
+    ad = Advertisement.new(json_ad)
 
-    puts "#{value} #{currency}"
-    puts "Area in square meters: #{area_in_square_meters}"
-    puts "Price per square meter: #{price_per_square_meter.round(2)} #{currency}"
-    puts "Number of rooms: #{rooms_number.downcase.in_numbers}"
+    puts "#{ad.price} #{ad.currency}"
+    puts "Area in square meters: #{ad.area_square_meters}"
+    puts "Price per square meter: #{ad.price_square_meter.round(2)} #{ad.currency}"
+    puts "Number of rooms: #{ad.rooms_number}"
     puts "-----------------------------"
   end
 
