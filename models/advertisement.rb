@@ -8,4 +8,9 @@ class Advertisement
     self.price_square_meter = 1.0 * price / area_square_meters
     self.rooms_number = json_ad["roomsNumber"].in_numbers
   end
+
+  def get_price_in_euro
+    @price_in_euro unless @price_in_euro.nil?
+    @price_in_euro = (currency == "EUR" ? price : price / 4.94)
+  end
 end
