@@ -4,6 +4,7 @@ require 'numbers_in_words/duck_punch'
 require './models/advertisement'
 require 'pry'
 require 'pry-nav'
+require 'aws-sdk-s3'
 
 base_url = "https://www.storia.ro/_next/data/Aw6VPVhS0t4d2Tlrs1qax/ro/cautare/inchiriere/apartament/bihor/oradea.json"
 page = 1
@@ -35,7 +36,6 @@ loop do
 
   total_ads += ads.count
   page += 1
-  break
 end
 
 average_price = total_price / total_ads
@@ -59,10 +59,27 @@ puts "Average price three rooms: #{average_price_3_rooms}"
 puts "Average price four+ rooms: #{average_price_4_rooms}"
 
 new_row = [Date.today.to_s, total_ads, average_price, average_price_1_room, average_price_2_rooms, average_price_3_rooms, average_price_4_rooms]
-rows = CSV.read("oradea_appartments_rent.csv")
 
-Date.today.to_s == rows[-1][0] ? (rows[-1] = new_row) : rows << new_row
 
-CSV.open("oradea_appartments_rent.csv", "w") do |csv|
+bucket_name = "ro-real-estate-prices-history"
+object_key = 'my-oradea_appartments_rent.csv'
+region = 'eu-north-1'
+s3_client = Aws::S3::Client.new(region: region, credentials: credentials)
+
+response = s3_client.get_object(
+  bucket: bucket_name,
+  key: object_key
+)
+
+rows = CSV.parse(response.body.read)
+Date.today.to_s == (rows&.count > 0 && rows[-1][0]) ? (rows[-1] = new_row) : rows << new_row
+
+csv_string = CSV.generate do |csv|
   rows.each {|row| csv << row}
 end
+
+s3_client.put_object(
+  bucket: bucket_name,
+  key: object_key,
+  body: csv_string
+)
