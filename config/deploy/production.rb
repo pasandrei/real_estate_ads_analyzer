@@ -4,9 +4,15 @@ server "ec2-16-170-170-154.eu-north-1.compute.amazonaws.com",
          forward_agent: true,
        }
 
-# role :app, %w{deploy@16.170.170.154}
-# set :ssh_options, {
-#   keys: %w(~/.ssh/real_estate_ads_analyzer.pem),
-#   forward_agent: true,
-#   auth_methods: %w(publickey password)
-# }
+namespace :deploy do
+  desc "Update crontab with whenever"
+  task :update_cron do
+    on roles(:app) do
+      within current_path do
+        execute :bundle, :exec, "whenever --update-crontab #{fetch(:application)}"
+      end
+    end
+  end
+
+  after :finishing, 'deploy:update_cron'
+end
