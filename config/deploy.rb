@@ -3,7 +3,7 @@ lock "~> 3.17.0"
 
 set :application, "real_estate_ads_analyzer"
 set :deploy_to, '~/real_estate_ads_analyzer'
-set :repo_url, "git@github.com:pasandrei/real_estate_ads_analyzer.git"
+set :repo_url, "https://github.com/pasandrei/real_estate_ads_analyzer.git"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
