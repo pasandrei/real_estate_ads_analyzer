@@ -40,6 +40,8 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2022.0105)
     multi_xml (0.6.0)
+    mustermann (2.0.2)
+      ruby2_keywords (~> 0.0.1)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (7.0.1)
@@ -49,10 +51,20 @@ GEM
       method_source (~> 1.0)
     pry-nav (1.0.0)
       pry (>= 0.9.10, < 0.15)
+    rack (2.2.4)
+    rack-protection (2.2.2)
+      rack
     rake (13.0.6)
+    ruby2_keywords (0.0.5)
+    sinatra (2.2.2)
+      mustermann (~> 2.0)
+      rack (~> 2.2)
+      rack-protection (= 2.2.2)
+      tilt (~> 2.0)
     sshkit (1.21.2)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    tilt (2.0.11)
     whenever (1.0.0)
       chronic (>= 0.6.3)
 
@@ -70,6 +82,7 @@ DEPENDENCIES
   numbers_in_words
   pry
   pry-nav
+  sinatra
   whenever
 
 BUNDLED WITH
