@@ -26,6 +26,9 @@ namespace :storia do
       ads.each do |json_ad|
         ad = Advertisement.new(json_ad)
 
+        # Exclude "To Rent" ads that should have actually been "To Sell"
+        next if ad.price / ad.rooms_number >= 1000
+
         puts "#{ad.price} #{ad.currency}"
         puts "Area in square meters: #{ad.area_square_meters}"
         puts "Price per square meter: #{ad.price_square_meter.round(2)} #{ad.currency}"
